@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Deutschtrainer · B1→C1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08090a;--s1:#111213;--s2:#181a1b;
+  --bdr:#252729;
+  --gold:#c8a96d;--gold2:#e0c48a;--teal:#5fa89a;--teal2:#7dc4b4;
+  --red:#c97070;--text:#dedad4;--muted:#5a5e62;--mid:#9a9ea2;
+  --xp:#8fb8e8;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+#root{min-height:100vh}
+.app{max-width:680px;margin:0 auto;padding:0 16px 100px}
+.hdr{padding:28px 0 20px;border-bottom:1px solid var(--bdr);margin-bottom:24px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.wordmark{font-family:'Instrument Serif',serif;font-size:20px;color:var(--gold)}
+.wordmark em{font-style:italic;color:var(--gold2)}
+.stats-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stat-pill{display:flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);background:var(--s2);border:1px solid var(--bdr);padding:4px 10px}
+.stat-pill .val{color:var(--text);font-weight:500}
+.stat-pill.fire .val{color:#e8845a}
+.stat-pill.xp .val{color:var(--xp)}
+.stat-pill.lv .val{color:var(--gold)}
+.prog-wrap{height:2px;background:var(--bdr);margin-top:12px}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s}
+.nav{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:24px}
+.nv{padding:9px 16px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;transition:all .2s}
+.nv.on{color:var(--gold);border-bottom-color:var(--gold)}
+.nv:hover:not(.on){color:var(--mid)}
+.card{background:var(--s1);border:1px solid var(--bdr);padding:24px;margin-bottom:16px}
+.card-accent{border-left:2px solid var(--gold)}
+.card-teal{border-left:2px solid var(--teal)}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+.lbl-t{color:var(--teal)} .lbl-m{color:var(--muted)}
+.ctitle{font-family:'Instrument Serif',serif;font-size:20px;color:var(--text);margin-bottom:12px;line-height:1.3}
+.scene{background:#060708;border-left:2px solid var(--gold);padding:12px 16px;margin:12px 0;font-style:italic;color:#b8b4ae;line-height:1.8;font-size:14px}
+.hint-line{font-size:11px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.kws{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.kw{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal2);background:rgba(95,168,154,.07);border:1px solid rgba(95,168,154,.18);padding:2px 6px}
+textarea{width:100%;background:#050607;border:1px solid var(--bdr);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;padding:12px 14px;resize:vertical;min-height:100px;outline:none;transition:border-color .2s}
+textarea:focus{border-color:var(--gold)} textarea:disabled{opacity:.65}
+input[type=text],input[type=password]{background:#050607;border:1px solid var(--bdr);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;padding:8px 12px;outline:none;transition:border-color .2s}
+input[type=text]{width:130px} input[type=password]{width:100%;margin-bottom:8px}
+input[type=text]:focus,input[type=password]:focus{border-color:var(--gold)}
+input.ok{border-color:var(--teal);color:var(--teal)} input.bad{border-color:var(--red);color:var(--red)}
+.row{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 20px;font-size:12px;font-weight:600;letter-spacing:.07em;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .18s;text-transform:uppercase}
+.btn-p{background:var(--gold);color:#08090a} .btn-p:hover{background:var(--gold2)} .btn-p:disabled{opacity:.3;cursor:not-allowed}
+.btn-g{background:transparent;color:var(--muted);border:1px solid var(--bdr)} .btn-g:hover{color:var(--text);border-color:var(--mid)}
+.btn-t{background:transparent;color:var(--teal);border:1px solid rgba(95,168,154,.3)} .btn-t:hover{background:rgba(95,168,154,.08)}
+.btn-r{background:transparent;color:var(--red);border:1px solid rgba(201,112,112,.3)} .btn-r:hover{background:rgba(201,112,112,.08)}
+.btn-sm{padding:6px 14px;font-size:11px}
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.opt{padding:11px 14px;background:#060708;border:1px solid var(--bdr);color:var(--text);font-size:14px;cursor:pointer;text-align:left;transition:all .15s;font-family:'DM Sans',sans-serif}
+.opt:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.opt.ok{border-color:var(--teal);color:var(--teal);background:rgba(95,168,154,.06)}
+.opt.bad{border-color:var(--red);color:var(--red);background:rgba(201,112,112,.06)}
+.opt:disabled{cursor:default}
+.fb{background:#050607;border:1px solid var(--bdr);padding:16px;margin-top:12px;white-space:pre-wrap;font-size:13px;line-height:1.95;color:var(--text)}
+.expl{background:var(--s2);border-left:2px solid var(--teal);padding:11px 14px;margin-top:12px;font-size:12px;line-height:1.85;white-space:pre-wrap;color:#a8b4b2;font-family:'JetBrains Mono',monospace}
+.model-box{background:rgba(95,168,154,.04);border:1px solid rgba(95,168,154,.15);padding:12px 16px;margin-top:10px;font-size:13px;line-height:1.8;color:#9ac4bc}
+.mlbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--teal);letter-spacing:.12em;margin-bottom:6px}
+.fill-r{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.fill-s{font-size:14px;color:var(--text);flex:1;min-width:180px;line-height:1.6}
+.fhint{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:20px}
+.cat-c{background:var(--s1);border:1px solid var(--bdr);padding:14px;cursor:pointer;transition:all .2s}
+.cat-c:hover{border-color:var(--gold)} .cat-c.weak{border-color:rgba(201,112,112,.4);background:rgba(201,112,112,.04)}
+.cat-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.cat-lv{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.cat-bar{height:2px;background:var(--bdr);margin-top:10px}
+.cat-bar-fill{height:100%;background:var(--gold);transition:width .4s}
+.cat-c.weak .cat-bar-fill{background:var(--red)}
+.weak-tag{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.1em;margin-top:4px}
+.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dash-c{background:var(--s1);border:1px solid var(--bdr);padding:16px}
+.dash-num{font-family:'Instrument Serif',serif;font-size:42px;color:var(--gold);line-height:1}
+.dash-lbl{font-size:11px;color:var(--muted);margin-top:4px}
+.dots{display:inline-flex;gap:3px;align-items:center}
+.dots span{width:4px;height:4px;background:var(--gold);border-radius:50%;animation:bop 1s infinite}
+.dots span:nth-child(2){animation-delay:.16s} .dots span:nth-child(3){animation-delay:.32s}
+@keyframes bop{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-4px);opacity:1}}
+.lvup{background:linear-gradient(135deg,rgba(200,169,109,.12),rgba(95,168,154,.08));border:1px solid rgba(200,169,109,.3);padding:20px;text-align:center;margin-bottom:16px}
+.lvup-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--gold2);margin-bottom:4px}
+.lvup-sub{font-size:13px;color:var(--muted)}
+.divider{height:1px;background:var(--bdr);margin:20px 0}
+.setup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-box{background:var(--s1);border:1px solid var(--bdr);padding:32px;max-width:440px;width:100%}
+.setup-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--gold);margin-bottom:8px}
+.setup-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px}
+.setup-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;margin-bottom:6px}
+.setup-note{font-size:11px;color:var(--muted);margin-top:10px;line-height:1.7}
+a{color:var(--teal)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect}=React;
+
+const PROXY="https://claude-proxy.docolina-marius.workers.dev";
+
+const LS={
+  get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null;}catch{return null;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}},
+  del(k){try{localStorage.removeItem(k);}catch{}},
+};
+
+const DEFAULT_PROFILE={
+  xp:0,level:1,totalSessions:0,
+  categories:{
+    Narration:{level:1,attempts:0,errors:0,lastScore:null},
+    Kasus:{level:1,attempts:0,errors:0,lastScore:null},
+    Konnektoren:{level:1,attempts:0,errors:0,lastScore:null},
+    Wortstellung:{level:1,attempts:0,errors:0,lastScore:null},
+    Kollokationen:{level:1,attempts:0,errors:0,lastScore:null},
+    Passiv:{level:1,attempts:0,errors:0,lastScore:null},
+  },
+  weakest:[],lastActive:null,
+};
+
+const BANK={
+  Kasus:{
+    1:[
+      {q:"Ich habe ___ Geschäftsführer angerufen.",a:"den",hint:"Akk. mask."},
+      {q:"Er schreibt ___ Kunden eine E-Mail.",a:"dem",hint:"Dat. mask."},
+      {q:"Wir haben ___ IT-Leiter informiert.",a:"den",hint:"Akk. mask."},
+      {q:"Sie spricht mit ___ Kollegen.",a:"dem",hint:"Dat. mask. nach 'mit'"},
+    ],
+    2:[
+      {q:"Die Kosten ___ Projekts sind gestiegen.",a:"des",hint:"Gen. neutr."},
+      {q:"Er dankt ___ gesamten Team.",a:"dem",hint:"Dat. neutr. nach 'danken'"},
+      {q:"Wir brauchen die Unterstützung ___ Vorstands.",a:"des",hint:"Gen. mask."},
+      {q:"Der Erfolg ___ Strategie ist messbar.",a:"der",hint:"Gen. fem."},
+    ],
+    3:[
+      {q:"Trotz ___ hohen Kosten lohnt es sich.",a:"der",hint:"Gen. nach 'trotz'"},
+      {q:"Wegen ___ Systemausfalls mussten wir reagieren.",a:"des",hint:"Gen. mask."},
+      {q:"Angesichts ___ steigenden Nachfrage investieren wir.",a:"der",hint:"Gen. fem."},
+      {q:"Innerhalb ___ Unternehmens gibt es Widerstand.",a:"des",hint:"Gen. neutr."},
+    ],
+  },
+  Konnektoren:{
+    1:[
+      {q:"Er telefonierte. ___ tippte er eine E-Mail.",a:"Dabei",hint:"gleichzeitig"},
+      {q:"Das Meeting war lang. ___ war es produktiv.",a:"Dennoch",hint:"trotzdem"},
+      {q:"Er zögerte kurz. ___ sprach er es an.",a:"Schließlich",hint:"am Ende"},
+    ],
+    2:[
+      {q:"Sie erkannte das Problem. ___ handelte sie sofort.",a:"Daraufhin",hint:"als Reaktion"},
+      {q:"Das Budget war knapp. ___ fanden wir eine Lösung.",a:"Trotzdem",hint:"obwohl schwierig"},
+      {q:"Er hörte aufmerksam zu. ___ stellte er Fragen.",a:"Anschließend",hint:"danach"},
+    ],
+    3:[
+      {q:"Das System war veraltet. ___ hatte es jahrelang funktioniert.",a:"Dabei",hint:"kontrastiv-gleichzeitig"},
+      {q:"Er lehnte das Angebot ab. ___ bat er um ein besseres.",a:"Gleichzeitig",hint:"zur selben Zeit"},
+      {q:"Die Kosten stiegen. ___ sanken die Einnahmen.",a:"Währenddessen",hint:"parallel, zeitgleich"},
+    ],
+  },
+  Wortstellung:{
+    1:[
+      {q:"Welcher Satz ist korrekt?",opts:["Wir haben leider das Angebot nicht erhalten.","Wir haben das Angebot leider nicht erhalten.","Leider wir haben das Angebot nicht erhalten."],a:1,expl:"'leider' steht nach Hilfsverb, vor Objekt und Negation."},
+      {q:"Welcher Satz klingt natürlich?",opts:["Ich habe gestern mit dem Kunden gesprochen leider.","Ich habe leider gestern mit dem Kunden gesprochen.","Leider habe ich gestern mit dem Kunden gesprochen."],a:2,expl:"Satzanfang mit 'Leider' + Verb-Zweit ist die eleganteste Form."},
+    ],
+    2:[
+      {q:"Welcher Satz ist grammatisch korrekt?",opts:["Er hat das System weil es veraltet war nicht aktualisiert.","Er hat das System nicht aktualisiert, weil es veraltet war.","Weil es veraltet war, er hat das System nicht aktualisiert."],a:1,expl:"Nebensatz mit 'weil' → Verb ans Ende. Hauptsatz bleibt normal."},
+    ],
+    3:[
+      {q:"Welche Variante ist stilistisch am stärksten?",opts:["Das Problem ist bekannt, aber niemand hat bisher gehandelt.","Obwohl das Problem bekannt ist, hat bisher niemand gehandelt.","Das Problem ist bekannt. Niemand hat bisher gehandelt."],a:1,expl:"'Obwohl' + Nebensatz zeigt den Kontrast elegant — typisch für B2/C1."},
+    ],
+  },
+  Kollokationen:{
+    1:[
+      {q:"Wie sagt man richtig?",opts:["einen Termin machen","einen Termin vereinbaren","einen Termin tun"],a:1,expl:"'vereinbaren' ist die korrekte Kollokation im Geschäftsdeutsch."},
+      {q:"Was ist korrekt?",opts:["eine Entscheidung machen","eine Entscheidung tun","eine Entscheidung treffen"],a:2,expl:"'Eine Entscheidung treffen' — feste Kollokation."},
+    ],
+    2:[
+      {q:"Was sagt man im Vertrieb?",opts:["ein Angebot machen","ein Angebot unterbreiten","ein Angebot geben"],a:1,expl:"'unterbreiten' klingt professioneller als 'machen' im B2B-Kontext."},
+      {q:"Korrekte Kombination?",opts:["Verantwortung tragen","Verantwortung haben","Verantwortung machen"],a:0,expl:"'Verantwortung tragen' — einzig korrekte Kollokation."},
+    ],
+    3:[
+      {q:"Im Geschäftsbericht: Was ist korrekt?",opts:["Maßnahmen ergreifen","Maßnahmen nehmen","Maßnahmen tun"],a:0,expl:"'Maßnahmen ergreifen' — gehobenes Geschäftsdeutsch."},
+    ],
+  },
+  Passiv:{
+    1:[
+      {q:"Das Team analysiert die Daten. → Passiv?",opts:["Die Daten werden vom Team analysiert.","Die Daten sind vom Team analysiert.","Die Daten werden das Team analysieren."],a:0,expl:"Vorgangspassiv Präsens: werden + Partizip II."},
+    ],
+    2:[
+      {q:"Der Kunde hat das Angebot abgelehnt. → Passiv Perfekt?",opts:["Das Angebot wurde vom Kunden abgelehnt worden.","Das Angebot ist vom Kunden abgelehnt worden.","Das Angebot hat vom Kunden abgelehnt werden."],a:1,expl:"Passiv Perfekt: ist + Partizip II + 'worden'."},
+    ],
+    3:[
+      {q:"Welche Variante passt am besten?",opts:["Es muss eine Lösung implementiert werden.","Eine Lösung muss implementiert werden.","Eine Lösung wird implementiert werden müssen."],a:1,expl:"Subjekt + Modalverb + Passiv-Infinitiv ist die klarste Form."},
+    ],
+  },
+};
+
+const NARRATION={
+  1:[
+    {scene:"Ein Mann läuft schnell die Treppe runter, stolpert fast und hält sich am Geländer fest.",hint:"Wer? Was passiert? Wie endet es?",kw:["stolpert","hält sich fest","plötzlich","nervös"],model:"Ein Mann eilt die Treppe hinunter. Plötzlich stolpert er fast – er greift nach dem Geländer und hält sich gerade noch fest. Er atmet kurz durch."},
+    {scene:"Jemand betritt ein fremdes Büro. Er wirkt unsicher und fragt nach dem Ansprechpartner.",hint:"Körpersprache + Dialog zeigen",kw:["betritt","wirkt","zögert","fragt nach"],model:"Ein Mann betritt das Büro – vorsichtig, fast zögernd. Er schaut sich kurz um, dann wendet er sich an die Rezeption. 'Entschuldigung, ich habe einen Termin mit Herrn Müller.'"},
+  ],
+  2:[
+    {scene:"In einem Meeting sagt jemand etwas Falsches. Ein Kollege merkt es, zögert — und korrigiert ihn höflich.",hint:"Innere Bewegung + Handlung zeigen",kw:["zögert","merkt","korrigiert","taktvoll","dennoch"],model:"Im Meeting macht ein Kollege eine falsche Aussage. Der andere hört zu, zögert einen Moment. Dann entscheidet er sich dennoch, ihn zu korrigieren – ruhig, fast beiläufig, ohne ihn bloßzustellen."},
+    {scene:"Ein Verkäufer ruft zum dritten Mal an. Der Kunde klingt genervt. Der Verkäufer passt sich sofort an.",hint:"Ton, Reaktion, Anpassung zeigen",kw:["merkt sofort","passt an","senkt die Stimme","ruhig"],model:"Der Kunde hebt ab – und schon nach zwei Worten ist klar: er ist genervt. Der Verkäufer macht eine kurze Pause, senkt die Stimme. 'Ich fasse mich kurz', sagt er. Und meint es diesmal wirklich."},
+  ],
+  3:[
+    {scene:"Es regnet stark. Eine Frau wartet an einer Bushaltestelle, schaut immer wieder auf die Uhr. Der Bus kommt nicht. Sie entscheidet sich.",hint:"Spannung aufbauen. 'immer wieder', 'schließlich', 'als ob'",kw:["wartet","immer wieder","schließlich","trotz des Regens","entscheidet sich"],model:"Es regnet in Strömen. Die Frau wartet – aber der Bus lässt auf sich warten. Immer wieder schaut sie auf die Uhr. Fünf Minuten. Zehn. Schließlich zieht sie die Schultern hoch und geht einfach los."},
+    {scene:"Ein IT-Leiter liest einen Bericht über einen Systemausfall. Er legt ihn weg, greift zum Telefon — und legt es wieder hin.",hint:"Innere Entscheidung zeigen ohne direkte Erklärung",kw:["liest","legt weg","greift","zögert","schließlich"],model:"Er liest den Bericht ein zweites Mal. Dann legt er ihn auf den Tisch, greift nach dem Telefon. Hält inne. Legt es zurück. Noch nicht bereit, dieses Gespräch zu führen."},
+  ],
+};
+
+function xpForLevel(l){return l*120;}
+function addXP(p,amt){let{xp,level}=p;xp+=amt;while(xp>=xpForLevel(level)){xp-=xpForLevel(level);level++;}return{...p,xp,level};}
+function updateCat(p,cat,correct){
+  const c={...p.categories[cat]};c.attempts++;if(!correct)c.errors++;
+  const rate=c.attempts>0?(c.errors/c.attempts):0;
+  if(c.attempts>=3){if(rate<0.2&&c.level<3)c.level=Math.min(3,c.level+1);else if(rate>0.6&&c.level>1)c.level=Math.max(1,c.level-1);}
+  c.lastScore=correct?"ok":"bad";
+  const cats={...p.categories,[cat]:c};
+  const weakest=Object.entries(cats).filter(([,v])=>v.attempts>=2&&(v.errors/v.attempts)>0.4).map(([k])=>k);
+  return{...p,categories:cats,weakest};
+}
+function lvL(l){return l===1?"B1":l===2?"B2":"C1";}
+function today(){return new Date().toISOString().split("T")[0];}
+function rand(a){return a[Math.floor(Math.random()*a.length)];}
+function Dots(){return <span className="dots"><span/><span/><span/></span>;}
+
+async function claude(prompt){
+  const r=await fetch(PROXY,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]}),
+  });
+  const d=await r.json();
+  if(d.error)throw new Error(d.error.message);
+  return d.content[0].text;
+}
+
+function App(){
+  const [profile,setProfile]=useState(()=>LS.get("dt_p")||{...DEFAULT_PROFILE});
+  const [streak,setStreak]=useState(()=>{
+    const s=LS.get("dt_s")||{days:0,lastDay:null};
+    const t=today();const y=new Date(Date.now()-86400000).toISOString().split("T")[0];
+    if(s.lastDay!==t&&s.lastDay!==y)return{days:0,lastDay:null};
+    return s;
+  });
+  const [tab,setTab]=useState("home");
+  const [lvUp,setLvUp]=useState(false);
+  const [errHist,setErrHist]=useState([]);
+  const [cat,setCat]=useState(null);
+  const [q,setQ]=useState(null);
+  const [exType,setExType]=useState(null);
+  const [free,setFree]=useState("");
+  const [fill,setFill]=useState("");
+  const [fillCk,setFillCk]=useState(null);
+  const [mcSel,setMcSel]=useState(null);
+  const [showEx,setShowEx]=useState(false);
+  const [narFb,setNarFb]=useState(null);
+  const [showMod,setShowMod]=useState(false);
+  const [exLoad,setExLoad]=useState(false);
+  const [genLoad,setGenLoad]=useState(false);
+  const [dyn,setDyn]=useState(null);
+
+  function saveP(p){setProfile(p);LS.set("dt_p",p);}
+  function updStreak(){
+    const t=today();if(streak.lastDay===t)return;
+    const y=new Date(Date.now()-86400000).toISOString().split("T")[0];
+    const ns={days:streak.lastDay===y?streak.days+1:1,lastDay:t};
+    setStreak(ns);LS.set("dt_s",ns);
+  }
+  function award(p,amt,c,ok){
+    const prev=p.level;let p2=addXP(p,amt);p2=updateCat(p2,c,ok);
+    p2.totalSessions=(p2.totalSessions||0)+1;
+    if(p2.level>prev)setLvUp(true);return p2;
+  }
+
+  function loadEx(c){
+    setCat(c);setFree("");setFill("");setFillCk(null);
+    setMcSel(null);setShowEx(false);setNarFb(null);setShowMod(false);setDyn(null);
+    if(c==="Narration"){
+      const lvl=profile.categories.Narration.level;
+      const pool=NARRATION[lvl]||NARRATION[1];
+      setQ(rand(pool));setExType("nar");
+    }else{
+      const lvl=profile.categories[c]?.level||1;
+      const pool=BANK[c]?.[lvl]||BANK[c]?.[1]||[];
+      if(pool.length){const ex=rand(pool);setQ(ex);setExType(ex.opts?"mc":"fill");}
+    }
+    setTab("ex");
+  }
+
+  async function genDyn(){
+    setGenLoad(true);setDyn(null);
+    try{
+      const lvl=profile.categories[cat]?.level||1;
+      const ctx=errHist.length>0?`Häufige Fehler des Lernenden: ${errHist.slice(-3).join(", ")}.`:"";
+
+      let prompt;
+      if(cat==="Narration"){
+        prompt=`Du bist Deutschlehrer. Erstelle eine NEUE Narrations-Szene auf Niveau ${lvL(lvl)} für einen Rumänen (Ziel: Geschäftsdeutsch/Vertrieb).
+${ctx}
+Die Szene soll eine alltägliche oder berufliche Situation beschreiben (Büro, Gespräch, Begegnung, Entscheidung).
+Antworte NUR mit JSON (kein Markdown, keine Erklärung außerhalb):
+{"type":"narration","scene":"...","hint":"...","kw":["wort1","wort2","wort3","wort4"],"model":"..."}
+scene: 2-3 Sätze, lebendige Situation
+hint: kurze Schreibanleitung (1 Satz)
+kw: 4 Schlüsselwörter die verwendet werden sollten
+model: Musterlösung (3-4 Sätze, B2/C1-Niveau)`;
+      }else{
+        const catGuide={
+          Kasus:"Kasus-Übung (Nominativ/Akkusativ/Dativ/Genitiv) mit Geschäftsdeutsch-Kontext. Lückentext mit Artikel oder Pronomen.",
+          Konnektoren:"Konnektoren-Übung (dabei/dennoch/schließlich/daraufhin/währenddessen etc.) mit zwei verbundenen Sätzen aus dem Berufsalltag.",
+          Wortstellung:"Wortstellung-Übung: Multiple-Choice mit 3 Sätzen, von denen einer grammatisch und stilistisch korrekt ist (Geschäftsdeutsch).",
+          Kollokationen:"Kollokationen-Übung: Multiple-Choice mit 3 Varianten, nur eine ist die korrekte feste Verbkombination im Deutschen.",
+          Passiv:"Passiv-Übung: Satz ins Passiv umformen oder Passiv-Variante wählen (Vorgangspassiv oder Zustandspassiv).",
+        };
+        prompt=`Erstelle eine ${cat}-Übung. Niveau: ${lvL(lvl)}. Kontext: ${catGuide[cat]||"Geschäftsdeutsch"}
+${ctx}
+Antworte NUR mit JSON (kein Markdown):
+Für Lückentext: {"type":"fill","question":"Aufgabenstellung","sentence":"Satz mit ___ Lücke","answer":"Antwort","explanation":"kurze Erklärung auf Deutsch"}
+Für Multiple Choice: {"type":"mc","question":"Aufgabenstellung","options":["Option A","Option B","Option C"],"answer":0,"explanation":"kurze Erklärung auf Deutsch"}
+Wichtig: answer bei mc ist der INDEX (0, 1 oder 2), nicht der Text.`;
+      }
+
+      const fb=await claude(prompt);
+      const clean=fb.replace(/```json|```/g,"").trim();
+      const parsed=JSON.parse(clean);
+
+      if(cat==="Narration"&&parsed.type==="narration"){
+        // For narration, load it as a new scene directly
+        setQ(parsed);setExType("nar");
+        setFree("");setNarFb(null);setShowMod(false);
+        setDyn(null);
+      }else{
+        setDyn(parsed);
+      }
+    }catch(e){
+      if(cat==="Narration"){
+        setDyn({type:"fill",question:"Fehler beim Generieren.",sentence:"___",answer:"–",explanation:e.message});
+      }else{
+        setDyn({type:"fill",question:"Fehler beim Generieren. Bitte nochmal versuchen.",sentence:"___",answer:"–",explanation:e.message});
+      }
+    }
+    setGenLoad(false);
+  }
+
+  async function submitNar(){
+    if(!free.trim()||exLoad)return;
+    setExLoad(true);
+    try{
+      const lvl=profile.categories.Narration.level;
+      const fb=await claude(`Du bist ein strenger Deutschlehrer (Lerner: Rumäne, Ziel B2-C1 Business).
+Niveau: ${lvL(lvl)}
+Szene: ${q.scene}
+Musterlösung: ${q.model}
+Schlüsselwörter (Bonus): ${q.kw.join(", ")}
+Antwort: "${free}"
+
+Antworte NUR auf Deutsch:
+✓ WAS GUT IST (1-2 Sätze, konkret)
+✗ FEHLER (Grammatik, Wortstellung, Ausdrucksstärke — nur echte Fehler)
+→ VERBESSERTER SATZ
+📌 HEUTE ÜBEN: (eine Sache)
+Sei direkt. Kein falsches Lob.`);
+      setNarFb(fb);updStreak();saveP(award(profile,20,"Narration",true));
+    }catch(e){setNarFb("Fehler: "+e.message);}
+    setExLoad(false);
+  }
+
+  function submitFill(ex){
+    const ok=fill.trim().toLowerCase()===(ex.a||ex.answer||"").toLowerCase();
+    setFillCk(ok);if(!ok)setErrHist(h=>[...h,`${cat}: ${ex.q||ex.sentence}`]);
+    updStreak();saveP(award(profile,ok?15:5,cat,ok));
+  }
+  function submitMC(i,ex){
+    if(showEx)return;setMcSel(i);setShowEx(true);
+    const ok=i===(ex.a??ex.answer);
+    if(!ok)setErrHist(h=>[...h,`${cat}: ${ex.q}`]);
+    updStreak();saveP(award(profile,ok?15:5,cat,ok));
+  }
+  function submitDynFill(){
+    if(!dyn)return;const ok=fill.trim().toLowerCase()===dyn.answer?.toLowerCase();
+    setFillCk(ok);saveP(award(profile,ok?15:5,cat,ok));
+  }
+  function submitDynMC(i){
+    if(showEx)return;setMcSel(i);setShowEx(true);
+    const ok=i===Number(dyn.answer);saveP(award(profile,ok?15:5,cat,ok));
+  }
+  function reset(){
+    setFree("");setFill("");setFillCk(null);setMcSel(null);
+    setShowEx(false);setNarFb(null);setShowMod(false);setDyn(null);
+    loadEx(cat);
+  }
+
+  const cats=Object.entries(profile.categories);
+  const xpPct=Math.round((profile.xp/xpForLevel(profile.level))*100);
+
+  return(
+    <div className="app">
+      <div className="hdr">
+        <div className="hdr-top">
+          <span className="wordmark">Deutsch<em>trainer</em></span>
+          <div className="stats-row">
+            <div className="stat-pill fire"><span>🔥</span><span className="val">{streak.days}</span></div>
+            <div className="stat-pill xp"><span>XP</span><span className="val">{profile.xp}</span></div>
+            <div className="stat-pill lv"><span>Lv</span><span className="val">{profile.level}</span></div>
+          </div>
+        </div>
+        <div className="prog-wrap"><div className="prog-bar" style={{width:`${xpPct}%`}}/></div>
+      </div>
+
+      <div className="nav">
+        <button className={`nv ${tab==="home"?"on":""}`} onClick={()=>setTab("home")}>Start</button>
+        <button className={`nv ${tab==="üben"||tab==="ex"?"on":""}`} onClick={()=>{setCat(null);setTab("üben");}}>Üben</button>
+        <button className={`nv ${tab==="profil"?"on":""}`} onClick={()=>setTab("profil")}>Profil</button>
+      </div>
+
+      {lvUp&&(
+        <div className="lvup">
+          <div className="lvup-title">Level {profile.level} erreicht 🎯</div>
+          <div className="lvup-sub">Weiter so. Die Aufgaben werden schwieriger.</div>
+          <div className="row" style={{justifyContent:"center",marginTop:12}}>
+            <button className="btn btn-p btn-sm" onClick={()=>setLvUp(false)}>Weiter</button>
+          </div>
+        </div>
+      )}
+
+      {tab==="home"&&(
+        <>
+          {profile.weakest.length>0&&(
+            <div className="card card-accent">
+              <div className="lbl">Schwachstellen erkannt</div>
+              <div className="ctitle">Heute fokussieren</div>
+              <div className="kws">
+                {profile.weakest.map(w=>(
+                  <span key={w} className="kw" style={{color:"var(--red)",borderColor:"rgba(201,112,112,.3)",cursor:"pointer"}}
+                    onClick={()=>loadEx(w)}>⚠ {w}</span>
+                ))}
+              </div>
+              <p style={{fontSize:13,color:"var(--muted)",lineHeight:1.7}}>
+                Fehlerquote über 40% erkannt. Gezieltes Üben bringt dich am schnellsten weiter.
+              </p>
+              <div className="row">
+                <button className="btn btn-p btn-sm" onClick={()=>loadEx(profile.weakest[0])}>Jetzt üben →</button>
+              </div>
+            </div>
+          )}
+          <div className="card card-teal">
+            <div className="lbl lbl-t">Tagesplan</div>
+            <div className="ctitle">15 Minuten täglich</div>
+            <div style={{fontSize:13,color:"var(--muted)",lineHeight:2.1}}>
+              ▸ 1 Narrations-Übung — schreiben, auswerten, korrigieren<br/>
+              ▸ 1 Grammatik-Drill — Kasus oder Konnektoren<br/>
+              ▸ 1 Seite laut vorlesen — Psychologie des Geldes<br/>
+              ▸ 3 neue Vertrieb/IT-Wörter notieren
+            </div>
+          </div>
+          <div className="dash-row">
+            <div className="dash-c"><div className="dash-num">{profile.totalSessions||0}</div><div className="dash-lbl">Übungen gesamt</div></div>
+            <div className="dash-c"><div className="dash-num">{streak.days}</div><div className="dash-lbl">Tage in Folge 🔥</div></div>
+          </div>
+          <div className="row"><button className="btn btn-p" onClick={()=>setTab("üben")}>Üben starten →</button></div>
+        </>
+      )}
+
+      {tab==="üben"&&(
+        <>
+          <div className="card"><div className="lbl lbl-m">Trainingsbereich</div><div className="ctitle">Kategorie wählen</div></div>
+          <div className="cat-grid">
+            {cats.map(([name,data])=>{
+              const isWeak=profile.weakest.includes(name);
+              const acc=data.attempts>0?Math.round(((data.attempts-data.errors)/data.attempts)*100):null;
+              return(
+                <div key={name} className={`cat-c ${isWeak?"weak":""}`} onClick={()=>loadEx(name)}>
+                  <div className="cat-name">{name}</div>
+                  <div className="cat-lv">{lvL(data.level)}</div>
+                  {acc!==null&&<div className="cat-lv" style={{marginTop:2}}>{acc}% korrekt</div>}
+                  {isWeak&&<div className="weak-tag">⚠ SCHWACH</div>}
+                  <div className="cat-bar"><div className="cat-bar-fill" style={{width:`${(data.level/3)*100}%`}}/></div>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {tab==="ex"&&cat&&(
+        <>
+          <button className="btn btn-g btn-sm" style={{marginBottom:16}} onClick={()=>{setCat(null);setTab("üben");}}>← Zurück</button>
+
+          {exType==="nar"&&q&&(
+            <div className="card card-accent">
+              <div className="lbl">Narration · {lvL(profile.categories.Narration.level)}</div>
+              <div className="ctitle">Beschreibe die Szene</div>
+              <div className="scene">{q.scene}</div>
+              <div className="hint-line">💡 {q.hint}</div>
+              <div className="kws">{q.kw.map(k=><span key={k} className="kw">{k}</span>)}</div>
+              <textarea value={free} onChange={e=>setFree(e.target.value)} placeholder="Schreib hier auf Deutsch..." disabled={!!narFb}/>
+              <div className="row">
+                {!narFb&&<button className="btn btn-p" onClick={submitNar} disabled={!free.trim()||exLoad}>{exLoad?<Dots/>:"Auswerten"}</button>}
+                {narFb&&!showMod&&<button className="btn btn-g" onClick={()=>setShowMod(true)}>Musterlösung</button>}
+                {narFb&&<button className="btn btn-p" onClick={reset}>Neue Aufgabe →</button>}
+              </div>
+              {narFb&&<div className="fb">{narFb}</div>}
+              {showMod&&<div className="model-box"><div className="mlbl">MUSTERLÖSUNG</div>{q.model}</div>}
+            </div>
+          )}
+
+          {exType==="fill"&&q&&!dyn&&(
+            <div className="card card-accent">
+              <div className="lbl">{cat} · {lvL(profile.categories[cat]?.level||1)}</div>
+              <div className="ctitle">Lückentext</div>
+              <div className="fill-r" style={{marginTop:12}}>
+                <div className="fill-s">{q.q.replace("___","[ ? ]")}</div>
+                <input type="text" value={fill} onChange={e=>setFill(e.target.value)}
+                  className={fillCk===null?"":fillCk?"ok":"bad"} placeholder="..."
+                  disabled={fillCk!==null} onKeyDown={e=>e.key==="Enter"&&fillCk===null&&fill.trim()&&submitFill(q)}/>
+                {fillCk===false&&<span className="fhint">→ {q.a} ({q.hint})</span>}
+              </div>
+              <div className="row">
+                {fillCk===null&&<button className="btn btn-p" onClick={()=>submitFill(q)} disabled={!fill.trim()}>Prüfen</button>}
+                {fillCk!==null&&<button className="btn btn-p" onClick={reset}>Neue Aufgabe →</button>}
+              </div>
+              {fillCk!==null&&<div className="expl">{fillCk?"✓ Richtig!":`✗ Falsch. Richtig: ${q.a}\n${q.hint}`}</div>}
+            </div>
+          )}
+
+          {exType==="mc"&&q&&!dyn&&(
+            <div className="card card-accent">
+              <div className="lbl">{cat} · {lvL(profile.categories[cat]?.level||1)}</div>
+              <div className="ctitle">{q.q}</div>
+              {q.sentence&&<div className="scene" style={{fontStyle:"normal"}}>{q.sentence}</div>}
+              <div className="opts">
+                {q.opts.map((o,i)=>(
+                  <button key={i} className={`opt ${showEx?(i===q.a?"ok":mcSel===i&&i!==q.a?"bad":""):""}`}
+                    onClick={()=>submitMC(i,q)} disabled={showEx}>{o}</button>
+                ))}
+              </div>
+              {showEx&&(<><div className="expl">{q.expl}</div><div className="row"><button className="btn btn-p" onClick={reset}>Neue Aufgabe →</button></div></>)}
+            </div>
+          )}
+
+          {dyn&&(
+            <div className="card card-teal">
+              <div className="lbl lbl-t">KI-generierte Aufgabe</div>
+              <div className="ctitle">{dyn.question}</div>
+              {dyn.type==="fill"&&(
+                <>
+                  <div className="fill-r" style={{marginTop:12}}>
+                    <div className="fill-s">{(dyn.sentence||"").replace("___","[ ? ]")}</div>
+                    <input type="text" value={fill} onChange={e=>setFill(e.target.value)}
+                      className={fillCk===null?"":fillCk?"ok":"bad"} placeholder="..." disabled={fillCk!==null}/>
+                    {fillCk===false&&<span className="fhint">→ {dyn.answer}</span>}
+                  </div>
+                  <div className="row">
+                    {fillCk===null&&<button className="btn btn-t" onClick={submitDynFill} disabled={!fill.trim()}>Prüfen</button>}
+                    {fillCk!==null&&<button className="btn btn-p" onClick={reset}>Neue Aufgabe →</button>}
+                  </div>
+                  {fillCk!==null&&<div className="expl">{fillCk?"✓ Richtig!\n":"✗ Falsch.\n"}{dyn.explanation}</div>}
+                </>
+              )}
+              {dyn.type==="mc"&&dyn.options&&(
+                <>
+                  <div className="opts" style={{marginTop:12}}>
+                    {dyn.options.map((o,i)=>(
+                      <button key={i} className={`opt ${showEx?(i===Number(dyn.answer)?"ok":mcSel===i&&i!==Number(dyn.answer)?"bad":""):""}`}
+                        onClick={()=>submitDynMC(i)} disabled={showEx}>{o}</button>
+                    ))}
+                  </div>
+                  {showEx&&(<><div className="expl">{dyn.explanation}</div><div className="row"><button className="btn btn-p" onClick={reset}>Neue Aufgabe →</button></div></>)}
+                </>
+              )}
+            </div>
+          )}
+
+          {cat!=="Narration"&&!dyn&&fillCk===null&&!showEx&&(
+            <div className="card">
+              <div className="lbl lbl-m">KI-Aufgabe</div>
+              <p style={{fontSize:13,color:"var(--muted)",marginBottom:12,lineHeight:1.7}}>
+                Personalisierte {cat}-Aufgabe generieren — basierend auf deinem Niveau und Fehlerprofil.
+              </p>
+              <button className="btn btn-t btn-sm" onClick={genDyn} disabled={genLoad}>
+                {genLoad?<Dots/>:"Aufgabe generieren"}
+              </button>
+            </div>
+          )}
+          {cat==="Narration"&&(
+            <div className="card">
+              <div className="lbl lbl-m">KI-Szene</div>
+              <p style={{fontSize:13,color:"var(--muted)",marginBottom:12,lineHeight:1.7}}>
+                Neue Szene von KI generieren — Niveau {lvL(profile.categories.Narration.level)}, personalisiert.
+              </p>
+              <button className="btn btn-t btn-sm" onClick={genDyn} disabled={genLoad}>
+                {genLoad?<Dots/>:"Neue Szene generieren"}
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {tab==="profil"&&(
+        <>
+          <div className="card">
+            <div className="lbl">Gesamtübersicht</div>
+            <div className="ctitle">Dein Fortschritt</div>
+            <div className="dash-row" style={{marginTop:16}}>
+              <div className="dash-c"><div className="dash-num" style={{fontSize:32}}>Lv {profile.level}</div><div className="dash-lbl">{profile.xp} / {xpForLevel(profile.level)} XP</div></div>
+              <div className="dash-c"><div className="dash-num" style={{fontSize:32}}>{streak.days}🔥</div><div className="dash-lbl">Tage in Folge</div></div>
+            </div>
+            <div className="prog-wrap" style={{marginTop:12}}><div className="prog-bar" style={{width:`${xpPct}%`}}/></div>
+          </div>
+          <div className="card">
+            <div className="lbl">Kategorien</div>
+            {cats.map(([name,d])=>{
+              const acc=d.attempts>0?Math.round(((d.attempts-d.errors)/d.attempts)*100):null;
+              const isWeak=profile.weakest.includes(name);
+              return(
+                <div key={name} style={{marginBottom:18}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+                    <span style={{fontSize:13,fontWeight:500}}>{name}</span>
+                    <span style={{fontFamily:"'JetBrains Mono',monospace",fontSize:11,color:isWeak?"var(--red)":"var(--muted)"}}>
+                      {lvL(d.level)} · {acc!==null?`${acc}%`:"–"} · {d.attempts} Vers.
+                    </span>
+                  </div>
+                  <div className="cat-bar"><div className="cat-bar-fill" style={{width:`${(d.level/3)*100}%`,background:isWeak?"var(--red)":"var(--gold)"}}/></div>
+                </div>
+              );
+            })}
+          </div>
+          {profile.weakest.length>0&&(
+            <div className="card" style={{borderColor:"rgba(201,112,112,.3)"}}>
+              <div className="lbl" style={{color:"var(--red)"}}>Schwachstellen</div>
+              <div className="ctitle">Fokus für diese Woche</div>
+              <div className="kws">
+                {profile.weakest.map(w=>(
+                  <span key={w} className="kw" style={{color:"var(--red)",borderColor:"rgba(201,112,112,.3)",cursor:"pointer"}} onClick={()=>loadEx(w)}>⚠ {w}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="divider"/>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <button className="btn btn-r btn-sm" onClick={()=>{if(confirm("Alle Daten löschen?")){LS.del("dt_p");LS.del("dt_s");setProfile({...DEFAULT_PROFILE});setStreak({days:0,lastDay:null});}}}>Reset</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
