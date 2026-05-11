@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Deutschtrainer · B1→C1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1612;
+  --bg2:#211d18;
+  --bg3:#2a241d;
+  --border:#3d3529;
+  --border2:#5a5040;
+  --ink:#e8e0d4;
+  --ink2:#a89880;
+  --ink3:#6b5f50;
+  --amber:#d4924a;
+  --amber2:#f0b46a;
+  --amber3:#fff0d8;
+  --green:#6aab7e;
+  --green2:#e8f5ee;
+  --red:#c46060;
+  --red2:#fce8e8;
+  --teal:#5a9fa8;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Playfair Display',serif;
+  --sans:'Epilogue',sans-serif;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);min-height:100vh;font-size:15px;line-height:1.6}
+#root{min-height:100vh}
+
+/* grain overlay */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.6}
+
+.app{max-width:660px;margin:0 auto;padding:0 20px 120px;position:relative;z-index:1}
+
+/* header */
+.hdr{padding:32px 0 22px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.wordmark{font-family:var(--serif);font-size:22px;color:var(--amber2);letter-spacing:-.01em}
+.wordmark em{font-style:italic;color:var(--ink2)}
+.stats{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-family:var(--mono);font-size:11px;color:var(--ink3);background:var(--bg3);border:1px solid var(--border);padding:3px 10px;border-radius:3px}
+.pill .v{color:var(--ink);font-weight:500}
+.xpbar{height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--amber),var(--amber2));transition:width .6s ease;border-radius:2px}
+
+/* nav */
+.nav{display:flex;border-bottom:1px solid var(--border);margin-bottom:28px;gap:0}
+.nv{padding:10px 16px;font-size:11px;font-weight:600;color:var(--ink3);cursor:pointer;background:none;border:none;border-bottom:2px solid transparent;font-family:var(--sans);letter-spacing:.1em;text-transform:uppercase;transition:all .2s}
+.nv.on{color:var(--amber2);border-bottom-color:var(--amber)}
+.nv:hover:not(.on){color:var(--ink)}
+.nv-key{margin-left:auto;font-size:10px;opacity:.4}
+.nv-key:hover{opacity:.8}
+
+/* cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,146,74,.2),transparent)}
+.card-amber{border-left:2px solid var(--amber)}
+.card-green{border-left:2px solid var(--green)}
+.card-ai{border:1px solid rgba(90,159,168,.3);background:rgba(90,159,168,.04)}
+
+.lbl{font-family:var(--mono);font-size:9px;color:var(--amber);letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
+.lbl-g{color:var(--green)}
+.lbl-m{color:var(--ink3)}
+.ctitle{font-family:var(--serif);font-size:19px;color:var(--ink);margin-bottom:12px;line-height:1.3}
+
+/* scene */
+.scene{background:var(--bg);border-left:2px solid var(--amber);padding:12px 16px;margin:12px 0;font-style:italic;color:var(--ink2);line-height:1.9;font-size:14px;border-radius:0 4px 4px 0}
+.hint-ln{font-size:11px;color:var(--ink3);margin-bottom:10px;font-family:var(--mono)}
+.kws{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.kw{font-family:var(--mono);font-size:10px;color:var(--teal);background:rgba(90,159,168,.08);border:1px solid rgba(90,159,168,.2);padding:2px 8px;border-radius:3px}
+
+/* textarea */
+textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.8;padding:12px 14px;resize:vertical;min-height:96px;outline:none;border-radius:4px;transition:border-color .2s}
+textarea:focus{border-color:var(--amber)}
+textarea:disabled{opacity:.55}
+
+/* inputs */
+input[type=text],input[type=password]{background:var(--bg);border:1px solid var(--border);color:var(--ink);font-family:var(--mono);font-size:13px;padding:8px 12px;outline:none;border-radius:4px;transition:border-color .2s}
+input[type=text]{width:130px}
+input[type=password]{width:100%;margin-bottom:10px}
+input[type=text]:focus,input[type=password]:focus{border-color:var(--amber)}
+input.ok{border-color:var(--green);color:var(--green)}
+input.bad{border-color:var(--red);color:var(--red)}
+
+/* buttons */
+.row{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:9px 20px;font-size:11px;font-weight:600;letter-spacing:.08em;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--ink2);font-family:var(--sans);border-radius:4px;text-transform:uppercase;transition:all .18s}
+.btn:hover{color:var(--ink);border-color:var(--ink2);background:var(--bg3)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.btn-p{background:var(--amber);color:var(--bg);border-color:var(--amber);font-weight:700}
+.btn-p:hover{background:var(--amber2);border-color:var(--amber2);color:var(--bg)}
+.btn-p:disabled{opacity:.35}
+.btn-sm{padding:6px 14px;font-size:10px}
+.btn-g{color:var(--green);border-color:rgba(106,171,126,.3)}
+.btn-g:hover{background:rgba(106,171,126,.08);color:var(--green);border-color:var(--green)}
+
+/* MC options */
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.opt{padding:11px 15px;background:var(--bg);border:1px solid var(--border);color:var(--ink);font-size:13px;cursor:pointer;text-align:left;transition:all .14s;font-family:var(--sans);border-radius:4px;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--amber);color:var(--amber2)}
+.opt.ok{border-color:var(--green);color:var(--green);background:rgba(106,171,126,.07)}
+.opt.bad{border-color:var(--red);color:var(--red);background:rgba(196,96,96,.07)}
+.opt:disabled{cursor:default}
+
+/* feedback */
+.fb{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:16px;margin-top:14px;font-size:13px;line-height:2.1;color:var(--ink);white-space:pre-wrap;min-height:44px;transition:border-color .3s}
+.fb.live{border-color:var(--amber);box-shadow:0 0 0 1px rgba(212,146,74,.1)}
+.expl{background:rgba(106,171,126,.07);border:1px solid rgba(106,171,126,.2);padding:12px 15px;margin-top:12px;font-size:12px;line-height:1.9;white-space:pre-wrap;color:var(--green);border-radius:4px;font-family:var(--mono)}
+.model-box{background:rgba(90,159,168,.05);border:1px solid rgba(90,159,168,.2);padding:13px 15px;margin-top:12px;font-size:13px;line-height:1.9;color:var(--ink2);border-radius:4px}
+.model-lbl{font-family:var(--mono);font-size:9px;color:var(--teal);letter-spacing:.15em;margin-bottom:7px}
+
+/* fill row */
+.fill-row{display:flex;align-items:center;gap:10px;margin:12px 0;flex-wrap:wrap}
+.fill-sent{font-size:14px;color:var(--ink);flex:1;min-width:180px;line-height:1.7}
+.fhint{font-size:10px;color:var(--ink3);font-family:var(--mono)}
+
+/* category grid */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin-bottom:20px}
+.cat-c{background:var(--bg2);border:1px solid var(--border);padding:16px;cursor:pointer;transition:all .2s;border-radius:6px;position:relative;overflow:hidden}
+.cat-c::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,146,74,.0),rgba(212,146,74,.0));transition:background .2s}
+.cat-c:hover{border-color:var(--amber);transform:translateY(-1px)}
+.cat-c:hover::after{background:linear-gradient(135deg,rgba(212,146,74,.04),transparent)}
+.cat-c.weak{border-color:rgba(196,96,96,.35);background:rgba(196,96,96,.04)}
+.cat-name{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.cat-meta{font-family:var(--mono);font-size:10px;color:var(--ink3)}
+.cat-bar{height:2px;background:var(--border);margin-top:12px;border-radius:2px;overflow:hidden}
+.cat-fill{height:100%;background:var(--amber);transition:width .4s;border-radius:2px}
+.cat-c.weak .cat-fill{background:var(--red)}
+.weak-tag{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:.1em;margin-top:4px}
+
+/* dashboard */
+.dash2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.dash-c{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:18px}
+.dash-num{font-family:var(--serif);font-size:44px;color:var(--amber2);line-height:1}
+.dash-lbl{font-size:11px;color:var(--ink3);margin-top:5px;font-family:var(--mono)}
+
+/* dots loading */
+.dots{display:inline-flex;gap:4px;align-items:center}
+.dots span{width:4px;height:4px;background:currentColor;border-radius:50%;animation:bop 1s infinite;opacity:.3}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bop{0%,80%,100%{transform:translateY(0);opacity:.3}40%{transform:translateY(-4px);opacity:1}}
+
+/* level up */
+.lvup{background:linear-gradient(135deg,rgba(212,146,74,.12),rgba(212,146,74,.04));border:1px solid rgba(212,146,74,.3);border-radius:6px;padding:22px;text-align:center;margin-bottom:16px}
+.lvup-title{font-family:var(--serif);font-size:26px;color:var(--amber2);margin-bottom:4px}
+.lvup-sub{font-size:13px;color:var(--ink3)}
+
+/* setup */
+.setup-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.setup-box{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:36px;max-width:420px;width:100%}
+.setup-title{font-family:var(--serif);font-size:30px;color:var(--amber2);margin-bottom:6px}
+.setup-sub{font-size:13px;color:var(--ink3);line-height:1.8;margin-bottom:26px}
+.setup-note{font-size:11px;color:var(--ink3);margin-top:10px;line-height:1.7}
+a{color:var(--teal)}
+
+.divider{height:1px;background:var(--border);margin:20px 0}
+
+/* tagesplan list */
+.tplan{list-style:none;padding:0;margin:10px 0 0}
+.tplan li{font-size:13px;color:var(--ink2);line-height:1;padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.tplan li:last-child{border-bottom:none}
+.tplan li::before{content:'▸';color:var(--amber);font-size:10px;flex-shrink:0}
+
+/* profil bars */
+.prof-row{margin-bottom:18px}
+.prof-meta{display:flex;justify-content:space-between;margin-bottom:6px}
+.prof-name{font-size:13px;font-weight:600}
+.prof-stat{font-family:var(--mono);font-size:10px;color:var(--ink3)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const LS={get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch{return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
+const DEF={xp:0,level:1,totalSessions:0,categories:{Narration:{level:1,attempts:0,errors:0},Kasus:{level:1,attempts:0,errors:0},Konnektoren:{level:1,attempts:0,errors:0},Wortstellung:{level:1,attempts:0,errors:0},Kollokationen:{level:1,attempts:0,errors:0},Passiv:{level:1,attempts:0,errors:0}},weakest:[],lastActive:null};
+const BANK={Kasus:{1:[{q:"Ich habe ___ Geschäftsführer angerufen.",a:"den",hint:"Akk. mask."},{q:"Er schreibt ___ Kunden eine E-Mail.",a:"dem",hint:"Dat. mask."},{q:"Wir haben ___ IT-Leiter informiert.",a:"den",hint:"Akk. mask."},{q:"Sie spricht mit ___ Kollegen.",a:"dem",hint:"Dat. mask. nach 'mit'"}],2:[{q:"Die Kosten ___ Projekts sind gestiegen.",a:"des",hint:"Gen. neutr."},{q:"Er dankt ___ gesamten Team.",a:"dem",hint:"Dat. neutr. nach 'danken'"},{q:"Wir brauchen die Unterstützung ___ Vorstands.",a:"des",hint:"Gen. mask."},{q:"Der Erfolg ___ Strategie ist messbar.",a:"der",hint:"Gen. fem."}],3:[{q:"Trotz ___ hohen Kosten lohnt es sich.",a:"der",hint:"Gen. nach 'trotz'"},{q:"Wegen ___ Systemausfalls mussten wir reagieren.",a:"des",hint:"Gen. mask."},{q:"Angesichts ___ steigenden Nachfrage investieren wir.",a:"der",hint:"Gen. fem."},{q:"Innerhalb ___ Unternehmens gibt es Widerstand.",a:"des",hint:"Gen. neutr."}]},Konnektoren:{1:[{q:"Er telefonierte. ___ tippte er eine E-Mail.",a:"Dabei",hint:"gleichzeitig"},{q:"Das Meeting war lang. ___ war es produktiv.",a:"Dennoch",hint:"trotzdem"},{q:"Er zögerte kurz. ___ sprach er es an.",a:"Schließlich",hint:"am Ende"}],2:[{q:"Sie erkannte das Problem. ___ handelte sie sofort.",a:"Daraufhin",hint:"als Reaktion"},{q:"Das Budget war knapp. ___ fanden wir eine Lösung.",a:"Trotzdem",hint:"obwohl schwierig"},{q:"Er hörte aufmerksam zu. ___ stellte er Fragen.",a:"Anschließend",hint:"danach"}],3:[{q:"Das System war veraltet. ___ hatte es jahrelang funktioniert.",a:"Dabei",hint:"kontrastiv-gleichzeitig"},{q:"Er lehnte das Angebot ab. ___ bat er um ein besseres.",a:"Gleichzeitig",hint:"zur selben Zeit"}]},Wortstellung:{1:[{q:"Welcher Satz ist korrekt?",opts:["Wir haben leider das Angebot nicht erhalten.","Wir haben das Angebot leider nicht erhalten.","Leider wir haben das Angebot nicht erhalten."],a:1,expl:"'leider' steht nach Hilfsverb, vor Objekt und Negation."},{q:"Welcher Satz klingt natürlich?",opts:["Ich habe gestern mit dem Kunden gesprochen leider.","Ich habe leider gestern mit dem Kunden gesprochen.","Leider habe ich gestern mit dem Kunden gesprochen."],a:2,expl:"Satzanfang mit 'Leider' + Verb-Zweit ist die eleganteste Form."}],2:[{q:"Welcher Satz ist grammatisch korrekt?",opts:["Er hat das System weil es veraltet war nicht aktualisiert.","Er hat das System nicht aktualisiert, weil es veraltet war.","Weil es veraltet war, er hat das System nicht aktualisiert."],a:1,expl:"Nebensatz mit 'weil' → Verb ans Ende. Hauptsatz bleibt normal."}],3:[{q:"Welche Variante ist stilistisch am stärksten?",opts:["Das Problem ist bekannt, aber niemand hat bisher gehandelt.","Obwohl das Problem bekannt ist, hat bisher niemand gehandelt.","Das Problem ist bekannt. Niemand hat bisher gehandelt."],a:1,expl:"'Obwohl' + Nebensatz zeigt den Kontrast elegant — typisch für B2/C1."}]},Kollokationen:{1:[{q:"Wie sagt man richtig?",opts:["einen Termin machen","einen Termin vereinbaren","einen Termin tun"],a:1,expl:"'vereinbaren' ist die korrekte Kollokation im Geschäftsdeutsch."},{q:"Was ist korrekt?",opts:["eine Entscheidung machen","eine Entscheidung tun","eine Entscheidung treffen"],a:2,expl:"'Eine Entscheidung treffen' — feste Kollokation."}],2:[{q:"Was sagt man im Vertrieb?",opts:["ein Angebot machen","ein Angebot unterbreiten","ein Angebot geben"],a:1,expl:"'unterbreiten' klingt professioneller als 'machen' im B2B-Kontext."},{q:"Korrekte Kombination?",opts:["Verantwortung tragen","Verantwortung haben","Verantwortung machen"],a:0,expl:"'Verantwortung tragen' — einzig korrekte Kollokation."}],3:[{q:"Im Geschäftsbericht: Was ist korrekt?",opts:["Maßnahmen ergreifen","Maßnahmen nehmen","Maßnahmen tun"],a:0,expl:"'Maßnahmen ergreifen' — gehobenes Geschäftsdeutsch."}]},Passiv:{1:[{q:"Das Team analysiert die Daten. → Passiv?",opts:["Die Daten werden vom Team analysiert.","Die Daten sind vom Team analysiert.","Die Daten werden das Team analysieren."],a:0,expl:"Vorgangspassiv Präsens: werden + Partizip II."}],2:[{q:"Der Kunde hat das Angebot abgelehnt. → Passiv Perfekt?",opts:["Das Angebot wurde vom Kunden abgelehnt worden.","Das Angebot ist vom Kunden abgelehnt worden.","Das Angebot hat vom Kunden abgelehnt werden."],a:1,expl:"Passiv Perfekt: ist + Partizip II + 'worden'."}],3:[{q:"Welche Variante passt am besten?",opts:["Es muss eine Lösung implementiert werden.","Eine Lösung muss implementiert werden.","Eine Lösung wird implementiert werden müssen."],a:1,expl:"Subjekt + Modalverb + Passiv-Infinitiv ist die klarste Form."}]}};
+const NAR={1:[{scene:"Ein Mann läuft schnell die Treppe runter, stolpert fast und hält sich am Geländer fest.",hint:"Wer? Was passiert? Wie endet es?",kw:["stolpert","hält sich fest","plötzlich","nervös"],model:"Ein Mann eilt die Treppe hinunter. Plötzlich stolpert er fast – er greift nach dem Geländer und hält sich gerade noch fest. Er atmet kurz durch."},{scene:"Jemand betritt ein fremdes Büro. Er wirkt unsicher und fragt nach dem Ansprechpartner.",hint:"Körpersprache + Dialog zeigen",kw:["betritt","wirkt","zögert","fragt nach"],model:"Ein Mann betritt das Büro – vorsichtig, fast zögernd. Er schaut sich kurz um, dann wendet er sich an die Rezeption. 'Entschuldigung, ich habe einen Termin mit Herrn Müller.'"}],2:[{scene:"In einem Meeting sagt jemand etwas Falsches. Ein Kollege merkt es, zögert — und korrigiert ihn höflich.",hint:"Innere Bewegung + Handlung zeigen",kw:["zögert","merkt","korrigiert","taktvoll","dennoch"],model:"Im Meeting macht ein Kollege eine falsche Aussage. Der andere hört zu, zögert einen Moment. Dann entscheidet er sich dennoch, ihn zu korrigieren – ruhig, fast beiläufig, ohne ihn bloßzustellen."},{scene:"Ein Verkäufer ruft zum dritten Mal an. Der Kunde klingt genervt. Der Verkäufer passt sich sofort an.",hint:"Ton, Reaktion, Anpassung zeigen",kw:["merkt sofort","passt an","senkt die Stimme","ruhig"],model:"Der Kunde hebt ab – und schon nach zwei Worten ist klar: er ist genervt. Der Verkäufer macht eine kurze Pause, senkt die Stimme. 'Ich fasse mich kurz', sagt er. Und meint es diesmal wirklich."}],3:[{scene:"Es regnet stark. Eine Frau wartet an einer Bushaltestelle, schaut immer wieder auf die Uhr. Der Bus kommt nicht. Sie entscheidet sich.",hint:"Spannung aufbauen. 'immer wieder', 'schließlich', 'als ob'",kw:["wartet","immer wieder","schließlich","trotz des Regens","entscheidet sich"],model:"Es regnet in Strömen. Die Frau wartet – aber der Bus lässt auf sich warten. Immer wieder schaut sie auf die Uhr. Fünf Minuten. Zehn. Schließlich zieht sie die Schultern hoch und geht einfach los."},{scene:"Ein IT-Leiter liest einen Bericht über einen Systemausfall. Er legt ihn weg, greift zum Telefon — und legt es wieder hin.",hint:"Innere Entscheidung zeigen ohne direkte Erklärung",kw:["liest","legt weg","greift","zögert","schließlich"],model:"Er liest den Bericht ein zweites Mal. Dann legt er ihn auf den Tisch, greift nach dem Telefon. Hält inne. Legt es zurück. Noch nicht bereit, dieses Gespräch zu führen."}]};
+
+function xpForLv(l){return l*120}
+function lvL(l){return l===1?"B1":l===2?"B2":"C1"}
+function rand(a){return a[Math.floor(Math.random()*a.length)]}
+function today(){return new Date().toISOString().split("T")[0]}
+function Dots(){return '<span class="dots"><span></span><span></span><span></span></span>'}
+
+let P=LS.get("dt_p3")||JSON.parse(JSON.stringify(DEF));
+let S=LS.get("dt_s3")||{days:0,lastDay:null};
+let tab="home",cat=null,exType=null,curQ=null,fillVal="",fillCk=null,mcSel=null,showEx=false,narFb=null,showMod=false,loading=false,lvUpPending=false,dynQ=null,genLoading=false,fbText="";
+
+function saveP(){LS.set("dt_p3",P)}
+function updStreak(){const t=today();if(S.lastDay===t)return;const y=new Date(Date.now()-86400000).toISOString().split("T")[0];S={days:S.lastDay===y?S.days+1:1,lastDay:t};LS.set("dt_s3",S)}
+function award(amt,c,ok){const prev=P.level;P.xp+=amt;while(P.xp>=xpForLv(P.level)){P.xp-=xpForLv(P.level);P.level++}const cd=P.categories[c];cd.attempts++;if(!ok)cd.errors++;if(cd.attempts>=3){const r=cd.errors/cd.attempts;if(r<0.2&&cd.level<3)cd.level=Math.min(3,cd.level+1);else if(r>0.6&&cd.level>1)cd.level=Math.max(1,cd.level-1)}P.weakest=Object.entries(P.categories).filter(([,v])=>v.attempts>=2&&(v.errors/v.attempts)>0.4).map(([k])=>k);P.totalSessions=(P.totalSessions||0)+1;if(P.level>prev)lvUpPending=true;saveP()}
+
+async function streamClaude(prompt,onChunk){
+  const key=LS.get("dt_key3");
+  if(!key)throw new Error("Kein API-Key.");
+  const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,stream:true,messages:[{role:"user",content:prompt}]})});
+  if(!resp.ok){const e=await resp.json();throw new Error(e.error?.message||"API error")}
+  const reader=resp.body.getReader();const dec=new TextDecoder();let buf="";
+  while(true){const{done,value}=await reader.read();if(done)break;buf+=dec.decode(value,{stream:true});const lines=buf.split("\n");buf=lines.pop();for(const line of lines){if(line.startsWith("data:")){const d=line.slice(5).trim();if(d==="[DONE]")continue;try{const j=JSON.parse(d);if(j.type==="content_block_delta"&&j.delta?.text)onChunk(j.delta.text)}catch{}}}}
+}
+async function callClaude(prompt){
+  const key=LS.get("dt_key3");
+  if(!key)throw new Error("Kein API-Key.");
+  const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:600,messages:[{role:"user",content:prompt}]})});
+  const d=await resp.json();if(d.error)throw new Error(d.error.message);return d.content[0].text;
+}
+
+function loadEx(c){cat=c;fillVal="";fillCk=null;mcSel=null;showEx=false;narFb=null;showMod=false;dynQ=null;fbText="";
+  if(c==="Narration"){const pool=NAR[P.categories.Narration.level]||NAR[1];curQ=rand(pool);exType="nar"}
+  else{const lvl=P.categories[c]?.level||1;const pool=BANK[c]?.[lvl]||BANK[c]?.[1]||[];if(pool.length){const ex=rand(pool);curQ=ex;exType=ex.opts?"mc":"fill"}}
+  tab="ex";render()
+}
+async function submitNar(){
+  if(!fillVal.trim()||loading)return;loading=true;narFb="";fbText="";render();
+  try{
+    const lvl=P.categories.Narration.level;
+    const prompt=`Du bist ein strenger Deutschlehrer (Lerner: Rumäne, Ziel B2-C1 Business). Niveau: ${lvL(lvl)}\nSzene: ${curQ.scene}\nMusterlösung: ${curQ.model}\nSchlüsselwörter (Bonus): ${curQ.kw.join(", ")}\nAntwort: "${fillVal}"\n\nAntworte NUR auf Deutsch:\n✓ WAS GUT IST (1-2 Sätze, konkret)\n✗ FEHLER (Grammatik, Wortstellung, Ausdrucksstärke — nur echte Fehler)\n→ VERBESSERTER SATZ\n📌 HEUTE ÜBEN: (eine Sache)\nSei direkt. Kein falsches Lob.`;
+    await streamClaude(prompt,(chunk)=>{fbText+=chunk;narFb=fbText;render()});
+    updStreak();award(20,"Narration",true);
+  }catch(e){narFb="Fehler: "+e.message}
+  loading=false;render()
+}
+function submitFill(ex){const ok=fillVal.trim().toLowerCase()===(ex.a||"").toLowerCase();fillCk=ok;updStreak();award(ok?15:5,cat,ok);render()}
+function submitMC(i,ex){if(showEx)return;mcSel=i;showEx=true;const ok=i===(ex.a??ex.answer);updStreak();award(ok?15:5,cat,ok);render()}
+async function genDyn(){
+  genLoading=true;dynQ=null;render();
+  try{
+    const lvl=P.categories[cat]?.level||1;
+    let prompt;
+    if(cat==="Narration"){
+      prompt=`Du bist Deutschlehrer. Erstelle eine NEUE Narrations-Szene auf Niveau ${lvL(lvl)} für einen Rumänen (Ziel: Geschäftsdeutsch/Vertrieb).\nAntworte NUR mit JSON (kein Markdown):\n{"type":"narration","scene":"...","hint":"...","kw":["w1","w2","w3","w4"],"model":"..."}\nscene: 2-3 Sätze. hint: kurze Anleitung. kw: 4 Wörter. model: Musterlösung 3-4 Sätze.`;
+    }else{
+      const g={Kasus:"Kasus-Lückentext mit Artikel/Pronomen, Geschäftskontext.",Konnektoren:"Konnektoren-Lückentext (dabei/dennoch/schließlich/daraufhin etc.).",Wortstellung:"3 Sätze MC, einer korrekt und stilistisch stark.",Kollokationen:"3 Varianten MC, eine korrekte feste Verbkombination.",Passiv:"Passiv-Übung: Satz umformen oder Variante wählen."};
+      prompt=`Erstelle eine ${cat}-Übung. Niveau: ${lvL(lvl)}. ${g[cat]||""}\nAntworte NUR mit JSON (kein Markdown):\nLückentext: {"type":"fill","question":"Aufgabe","sentence":"Satz mit ___ Lücke","answer":"Antwort","explanation":"Erklärung"}\nMC: {"type":"mc","question":"Aufgabe","options":["A","B","C"],"answer":0,"explanation":"Erklärung"}\nanswer bei mc ist INDEX (0,1,2).`;
+    }
+    const raw=await callClaude(prompt);
+    const clean=raw.replace(/```json|```/g,"").trim();
+    const parsed=JSON.parse(clean);
+    if(cat==="Narration"&&parsed.type==="narration"){curQ=parsed;exType="nar";narFb=null;showMod=false;fillVal=""}
+    else{dynQ=parsed;fillVal="";fillCk=null;mcSel=null;showEx=false}
+  }catch(e){dynQ={type:"fill",question:"Fehler: "+e.message,sentence:"___",answer:"-",explanation:""}}
+  genLoading=false;render()
+}
+function resetEx(){fillVal="";fillCk=null;mcSel=null;showEx=false;narFb=null;showMod=false;dynQ=null;fbText="";loadEx(cat)}
+
+function render(){
+  const key=LS.get("dt_key3");
+  const app=document.getElementById("root");
+  if(!app)return;
+  if(!key){app.innerHTML=`<div class="setup-wrap"><div class="setup-box">
+    <div class="setup-title">Deutsch<em style="font-style:italic">trainer</em></div>
+    <p class="setup-sub">Anthropic API-Key eingeben — wird nur lokal im Browser gespeichert. Kein Server.</p>
+    <div class="lbl">API-Key</div>
+    <input type="password" id="apiInput" placeholder="sk-ant-..."/>
+    <button class="btn btn-p" style="width:100%;justify-content:center" onclick="saveKey()">Speichern & starten</button>
+    <p class="setup-note">Key bleibt im localStorage dieses Browsers. <a href="https://console.anthropic.com" target="_blank">console.anthropic.com →</a></p>
+  </div></div>`;return}
+
+  const xpPct=Math.round((P.xp/xpForLv(P.level))*100);
+  const cats=Object.entries(P.categories);
+  let h=`<div class="hdr"><div class="hdr-top">
+    <span class="wordmark">Deutsch<em>trainer</em></span>
+    <div class="stats">
+      <span class="pill">🔥 <span class="v">${S.days}</span></span>
+      <span class="pill">XP <span class="v">${P.xp}</span></span>
+      <span class="pill">Lv <span class="v">${P.level}</span></span>
+    </div>
+  </div><div class="xpbar"><div class="xpfill" style="width:${xpPct}%"></div></div></div>
+  <div class="nav">
+    <button class="nv ${tab==="home"?"on":""}" onclick="setTab('home')">Start</button>
+    <button class="nv ${tab==="üben"||tab==="ex"?"on":""}" onclick="setTab('üben')">Üben</button>
+    <button class="nv ${tab==="profil"?"on":""}" onclick="setTab('profil')">Profil</button>
+    <button class="nv nv-key" onclick="LS.del('dt_key3');render()">Key ×</button>
+  </div>`;
+
+  if(lvUpPending){h+=`<div class="lvup"><div class="lvup-title">Level ${P.level} erreicht</div><div class="lvup-sub">Glückwunsch. Die Aufgaben werden jetzt schwieriger.</div><div class="row" style="justify-content:center;margin-top:12px"><button class="btn btn-p btn-sm" onclick="lvUpPending=false;render()">Weiter</button></div></div>`;lvUpPending=false}
+
+  if(tab==="home"){
+    if(P.weakest.length>0){h+=`<div class="card card-amber"><div class="lbl">⚠ Schwachstellen erkannt</div><div class="ctitle">Heute fokussieren</div><div class="kws">${P.weakest.map(w=>`<span class="kw" style="color:var(--red);border-color:rgba(196,96,96,.3);cursor:pointer" onclick="loadEx('${w}')">⚠ ${w}</span>`).join("")}</div><div class="row"><button class="btn btn-p btn-sm" onclick="loadEx('${P.weakest[0]}')">Jetzt üben →</button></div></div>`}
+    h+=`<div class="card card-green"><div class="lbl lbl-g">Tagesplan</div><div class="ctitle">15 Minuten täglich</div><ul class="tplan">
+      <li>1 Narrations-Übung — schreiben, auswerten, korrigieren</li>
+      <li>1 Grammatik-Drill — Kasus oder Konnektoren</li>
+      <li>1 Seite laut vorlesen — Psychologie des Geldes</li>
+      <li>3 neue Vertrieb/IT-Wörter notieren</li>
+    </ul></div>
+    <div class="dash2">
+      <div class="dash-c"><div class="dash-num">${P.totalSessions||0}</div><div class="dash-lbl">Übungen gesamt</div></div>
+      <div class="dash-c"><div class="dash-num">${S.days}</div><div class="dash-lbl">Tage in Folge 🔥</div></div>
+    </div>
+    <div class="row"><button class="btn btn-p" onclick="setTab('üben')">Üben starten →</button></div>`;
+  }
+
+  if(tab==="üben"){
+    h+=`<div class="cat-grid">`;
+    for(const[name,data]of cats){const isWeak=P.weakest.includes(name);const acc=data.attempts>0?Math.round(((data.attempts-data.errors)/data.attempts)*100):null;
+      h+=`<div class="cat-c ${isWeak?"weak":""}" onclick="loadEx('${name}')">
+        <div class="cat-name">${name}</div>
+        <div class="cat-meta">${lvL(data.level)}${acc!==null?" · "+acc+"%":""} · ${data.attempts} Vers.</div>
+        ${isWeak?'<div class="weak-tag">⚠ SCHWACH</div>':""}
+        <div class="cat-bar"><div class="cat-fill" style="width:${(data.level/3)*100}%"></div></div>
+      </div>`}
+    h+=`</div>`;
+  }
+
+  if(tab==="ex"&&cat){
+    h+=`<button class="btn btn-sm" style="margin-bottom:16px" onclick="setTab('üben')">← Zurück</button>`;
+    if(exType==="nar"&&curQ){
+      h+=`<div class="card card-amber">
+        <div class="lbl">Narration · ${lvL(P.categories.Narration.level)}</div>
+        <div class="ctitle">Beschreibe die Szene</div>
+        <div class="scene">${curQ.scene}</div>
+        <div class="hint-ln">💡 ${curQ.hint}</div>
+        <div class="kws">${curQ.kw.map(k=>`<span class="kw">${k}</span>`).join("")}</div>
+        <textarea id="narTA" placeholder="Schreib hier auf Deutsch..." ${narFb?"disabled":""}>${fillVal}</textarea>
+        <div class="row">
+          ${!narFb?`<button class="btn btn-p" onclick="doNar()" ${loading||!fillVal.trim()?"disabled":""}>${loading?Dots():"Auswerten"}</button>`:""}
+          ${narFb&&!showMod?`<button class="btn btn-sm" onclick="showMod=true;render()">Musterlösung anzeigen</button>`:""}
+          ${narFb?`<button class="btn btn-p" onclick="resetEx()">Neue Aufgabe →</button>`:""}
+        </div>
+        ${narFb?`<div class="fb ${loading?"live":""}">${narFb}</div>`:""}
+        ${showMod?`<div class="model-box"><div class="model-lbl">Musterlösung</div>${curQ.model}</div>`:""}
+      </div>`;
+    }
+    if(exType==="fill"&&curQ&&!dynQ){
+      h+=`<div class="card card-amber">
+        <div class="lbl">${cat} · ${lvL(P.categories[cat]?.level||1)}</div>
+        <div class="ctitle">Lückentext ausfüllen</div>
+        <div class="fill-row">
+          <div class="fill-sent">${curQ.q.replace("___","<span style='color:var(--amber2);font-family:var(--mono)'>[?]</span>")}</div>
+          <input type="text" id="fillIn" class="${fillCk===null?"":(fillCk?"ok":"bad")}" value="${fillVal}" placeholder="..." ${fillCk!==null?"disabled":""} onkeydown="if(event.key==='Enter'&&fillCk===null)doFill()"/>
+          ${fillCk===false?`<span class="fhint">→ ${curQ.a} (${curQ.hint})</span>`:""}
+        </div>
+        <div class="row">
+          ${fillCk===null?`<button class="btn btn-p" onclick="doFill()" ${!fillVal.trim()?"disabled":""}>Prüfen</button>`:`<button class="btn btn-p" onclick="resetEx()">Neue Aufgabe →</button>`}
+        </div>
+        ${fillCk!==null?`<div class="expl">${fillCk?"✓ Richtig!":`✗ Falsch. Richtig: ${curQ.a}\n${curQ.hint}`}</div>`:""}
+      </div>`;
+    }
+    if(exType==="mc"&&curQ&&!dynQ){
+      h+=`<div class="card card-amber">
+        <div class="lbl">${cat} · ${lvL(P.categories[cat]?.level||1)}</div>
+        <div class="ctitle">${curQ.q}</div>
+        <div class="opts">${curQ.opts.map((o,i)=>`<button class="opt ${showEx?(i===curQ.a?"ok":mcSel===i&&i!==curQ.a?"bad":""):""}" onclick="doMC(${i})" ${showEx?"disabled":""}>${o}</button>`).join("")}</div>
+        ${showEx?`<div class="expl">${curQ.expl}</div><div class="row"><button class="btn btn-p" onclick="resetEx()">Neue Aufgabe →</button></div>`:""}
+      </div>`;
+    }
+    if(dynQ){
+      h+=`<div class="card card-ai"><div class="lbl lbl-g">KI-generierte Aufgabe</div><div class="ctitle">${dynQ.question||""}</div>`;
+      if(dynQ.type==="fill"){
+        h+=`<div class="fill-row"><div class="fill-sent">${(dynQ.sentence||"").replace("___","<span style='color:var(--amber2);font-family:var(--mono)'>[?]</span>")}</div>
+        <input type="text" id="dynFill" class="${fillCk===null?"":(fillCk?"ok":"bad")}" value="${fillVal}" placeholder="..." ${fillCk!==null?"disabled":""}/>
+        ${fillCk===false?`<span class="fhint">→ ${dynQ.answer}</span>`:""}</div>
+        <div class="row">${fillCk===null?`<button class="btn btn-p" onclick="doDynFill()">Prüfen</button>`:`<button class="btn btn-p" onclick="resetEx()">Neue Aufgabe →</button>`}</div>
+        ${fillCk!==null?`<div class="expl">${fillCk?"✓ Richtig!\n":""} ${dynQ.explanation}</div>`:""}`;
+      }
+      if(dynQ.type==="mc"&&dynQ.options){
+        h+=`<div class="opts" style="margin-top:12px">${dynQ.options.map((o,i)=>`<button class="opt ${showEx?(i===Number(dynQ.answer)?"ok":mcSel===i&&i!==Number(dynQ.answer)?"bad":""):""}" onclick="doDynMC(${i})" ${showEx?"disabled":""}>${o}</button>`).join("")}</div>
+        ${showEx?`<div class="expl">${dynQ.explanation}</div><div class="row"><button class="btn btn-p" onclick="resetEx()">Neue Aufgabe →</button></div>`:""}`;
+      }
+      h+=`</div>`;
+    }
+    if(!dynQ&&fillCk===null&&!showEx){
+      const isNar=cat==="Narration";
+      h+=`<div class="card"><div class="lbl lbl-m">KI-Aufgabe</div><p style="font-size:13px;color:var(--ink3);margin-bottom:12px;line-height:1.7">${isNar?"Neue Szene von KI generieren":"Personalisierte "+cat+"-Aufgabe basierend auf deinem Fehlerprofil"} — Niveau ${lvL(P.categories[cat]?.level||1)}.</p><button class="btn" onclick="genDyn()" ${genLoading?"disabled":""}>${genLoading?Dots():(isNar?"Neue Szene generieren":"Aufgabe generieren")}</button></div>`;
+    }
+  }
+
+  if(tab==="profil"){
+    h+=`<div class="card"><div class="lbl">Übersicht</div>
+    <div class="dash2" style="margin-top:12px">
+      <div class="dash-c"><div class="dash-num" style="font-size:32px">Lv ${P.level}</div><div class="dash-lbl">${P.xp} / ${xpForLv(P.level)} XP</div></div>
+      <div class="dash-c"><div class="dash-num" style="font-size:32px">${S.days} 🔥</div><div class="dash-lbl">Tage in Folge</div></div>
+    </div>
+    <div class="xpbar" style="margin-top:10px"><div class="xpfill" style="width:${xpPct}%"></div></div></div>
+    <div class="card"><div class="lbl">Kategorien</div><div style="margin-top:14px">`;
+    for(const[name,d]of cats){const acc=d.attempts>0?Math.round(((d.attempts-d.errors)/d.attempts)*100):null;const isWeak=P.weakest.includes(name);
+      h+=`<div class="prof-row"><div class="prof-meta"><span class="prof-name">${name}</span><span class="prof-stat" style="color:${isWeak?"var(--red)":"var(--ink3)"}">${lvL(d.level)} · ${acc!==null?acc+"%":"–"} · ${d.attempts} Versuche</span></div><div class="cat-bar"><div class="cat-fill" style="width:${(d.level/3)*100}%;background:${isWeak?"var(--red)":"var(--amber)"}"></div></div></div>`}
+    h+=`</div></div><div class="divider"></div>
+    <button class="btn btn-sm" style="color:var(--red);border-color:rgba(196,96,96,.3)" onclick="if(confirm('Alle Daten löschen?')){LS.del('dt_p3');LS.del('dt_s3');P=JSON.parse(JSON.stringify(DEF));S={days:0,lastDay:null};render()}">Fortschritt zurücksetzen</button>`;
+  }
+
+  app.innerHTML=h;
+
+  if(tab==="ex"&&exType==="nar"&&!narFb){const ta=document.getElementById("narTA");if(ta){ta.addEventListener("input",e=>{fillVal=e.target.value});ta.value=fillVal}}
+  if(tab==="ex"&&exType==="fill"&&!dynQ){const inp=document.getElementById("fillIn");if(inp)inp.addEventListener("input",e=>{fillVal=e.target.value})}
+  if(tab==="ex"&&dynQ&&dynQ.type==="fill"){const inp=document.getElementById("dynFill");if(inp)inp.addEventListener("input",e=>{fillVal=e.target.value})}
+}
+
+function setTab(t){tab=t;if(t==="üben")cat=null;render()}
+function saveKey(){const v=document.getElementById("apiInput")?.value?.trim();if(!v)return;LS.set("dt_key3",v);render()}
+function doNar(){const ta=document.getElementById("narTA");if(ta)fillVal=ta.value;submitNar()}
+function doFill(){const inp=document.getElementById("fillIn");if(inp)fillVal=inp.value;submitFill(curQ)}
+function doMC(i){submitMC(i,curQ)}
+function doDynFill(){const inp=document.getElementById("dynFill");if(inp)fillVal=inp.value;const ok=fillVal.trim().toLowerCase()===dynQ.answer?.toLowerCase();fillCk=ok;award(ok?15:5,cat,ok);render()}
+function doDynMC(i){if(showEx)return;mcSel=i;showEx=true;const ok=i===Number(dynQ.answer);award(ok?15:5,cat,ok);render()}
+
+render();
+</script>
+</body>
+</html>
